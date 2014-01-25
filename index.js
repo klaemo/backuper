@@ -7,13 +7,13 @@ var moment = require('moment')
 module.exports = function backup (opts, done) {
   var s3 = knox.createClient(opts.s3)
   
-  backup.pack(opts, function (err, path, bytes) {
+  pack(opts, function (err, path, bytes) {
     if (err) return done(err)
     
-    backup.upload(s3, path, bytes, function (err, res) {
+    upload(s3, path, bytes, function (err, res) {
       if (err) return done(err)
     
-      backup.clean(s3, opts.retention, function (err, data) {
+      clean(s3, opts.retention, function (err, data) {
         if (err) return done(err)
         done()
       })

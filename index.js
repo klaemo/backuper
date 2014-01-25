@@ -45,7 +45,9 @@ function pack (opts, cb) {
     { expand: true, cwd: opts.cwd, src: opts.src }
   ])
 
-  archive.finalize(onError)
+  archive.finalize(function (err) {
+    if (err) onError(err)
+  })
 }
 
 function upload (s3, archive, bytes, cb) {

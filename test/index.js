@@ -4,10 +4,14 @@ var fs = require('fs')
 var knox = require('knox')
 
 var i = Math.round(Math.random() * 100)
-var dest = __dirname + '/test' + i + '.zip'
-var conf = require('../../s3.json')
-conf.bucket = 'backuper-test'
-var s3 = knox.createClient(conf)
+var dest = 'test' + i + '.zip'
+
+var s3opts = {
+  "key": "",
+  "secret": "",
+  "bucket": "backuper-test"
+}
+var s3 = knox.createClient(s3opts)
 
 backup.pack({
   format: 'zip',
@@ -17,7 +21,6 @@ backup.pack({
 }, function (err, path, bytes) {
   assert.ifError(err)
   assert.equal(bytes, 246)
-  assert.equal(path, dest)
   console.log('#pack() OK')
   
   backup.upload(s3, path, bytes, function (err, res) {

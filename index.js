@@ -36,7 +36,7 @@ function pack (opts, cb) {
   archive.on('error', onError)
   output.on('error', onError)
 
-  function onError(err) { throw err }
+  function onError(err) { cb(err) }
 
   archive.pipe(output)
 
@@ -44,9 +44,7 @@ function pack (opts, cb) {
     { expand: true, cwd: opts.cwd, src: opts.src }
   ])
 
-  archive.finalize(function (err, bytes) {
-    if (err) return onError(err)
-  })
+  archive.finalize(onError)
 }
 
 function upload (s3, archive, bytes, cb) {

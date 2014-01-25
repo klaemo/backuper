@@ -26,7 +26,8 @@ module.exports.upload = upload
 module.exports.clean = clean
 
 function pack (opts, cb) {
-  var output = fs.createWriteStream(opts.dest)
+  var tmpDir = require('os').tmpdir() || '/tmp'
+  var output = fs.createWriteStream(path.join(tmpDir, opts.dest))
   var archive = archiver(opts.format || 'zip')
 
   output.on('close', function () {
